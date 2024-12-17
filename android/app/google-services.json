@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "572363600328",
+    "project_id": "toko-electronic",
+    "storage_bucket": "toko-electronic.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572363600328:android:d69ac74dd8a2afcf85d0fd",
+        "android_client_info": {
+          "package_name": "com.example.toko_electronic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkpMPCEEL3_8cQizAG9f6t2J2H34mbFTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572363600328:android:d52968632e59869785d0fd",
+        "android_client_info": {
+          "package_name": "com.example.toko_electronik"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkpMPCEEL3_8cQizAG9f6t2J2H34mbFTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
