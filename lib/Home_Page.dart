@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                                           backgroundColor: Colors.green,
                                           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                                         ),
-                                        child: Text('masukan keranjang'),
+                                        child: Text('addto cart'),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {

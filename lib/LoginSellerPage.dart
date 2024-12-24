@@ -125,14 +125,22 @@ class _SellerPageState extends State<SellerPage> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
+              
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBZpJ0lU9CmuCQ3dtl1MtLqrcfMoxUSJVBXA&s',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYiUlnMmCRrBXaElpUIblY-vjgbdN93IYJCA&s',
                     height: 100,
                     width: 100,
                   ),
+                   const Text(
+                  'Login to Your Seller Account',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                   const SizedBox(height: 20),
                   Card(
                     elevation: 4,

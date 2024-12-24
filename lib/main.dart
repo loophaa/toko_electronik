@@ -133,12 +133,18 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBZpJ0lU9CmuCQ3dtl1MtLqrcfMoxUSJVBXA&s',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYiUlnMmCRrBXaElpUIblY-vjgbdN93IYJCA&s',
                     height: 100,
                     width: 100,
                   ),
                   const SizedBox(height: 20),
-
+                   const Text(
+                  'Login to Your Account',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                   // Card untuk input Email dan Password
                   Card(
                     elevation: 4,

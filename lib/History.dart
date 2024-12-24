@@ -51,64 +51,73 @@ class _HistoryPageState extends State<HistoryPage> {
         title: Text(isAdmin ? 'Semua Riwayat Pembelian' : 'Riwayat Pembelian'),
         backgroundColor: Colors.blueAccent,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        // Modify the query based on admin status
-        stream: isAdmin
-            ? FirebaseFirestore.instance.collection('history').snapshots()
-            : FirebaseFirestore.instance
-                .collection('history')
-                .where('buyerEmail', isEqualTo: user.email)
-                .snapshots(),
-        builder: (context, historySnapshot) {
-          if (historySnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (!historySnapshot.hasData || historySnapshot.data!.docs.isEmpty) {
-            return const Center(
-              child: Text('Tidak ada riwayat pembelian'),
-            );
-          }
-
-          final histories = historySnapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: histories.length,
-            itemBuilder: (context, index) {
-              final history = histories[index];
-              final String buyerEmail = history['buyerEmail'];
-              final int totalPrice = history['totalPrice'];
-              final Timestamp timestamp = history['timestamp'];
-
-              return Card(
-                margin: const EdgeInsets.all(8.0),
-                elevation: 2,
-                child: ListTile(
-                  title: Text(
-                    'Total Harga: Rp ${totalPrice.toString().replaceAllMapped(
-                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                          (Match m) => '${m[1]}.',
-                        )}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Waktu: ${timestamp.toDate().toString().split('.')[0]}',
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        'Pembeli: $buyerEmail',
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  isThreeLine: true,
-                ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+                'https://i.ytimg.com/vi/BGuR7k-Y3Dk/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCybj_gehDtOMM-In7dCKACxPIxFQ'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: StreamBuilder<QuerySnapshot>(
+          // Modify the query based on admin status
+          stream: isAdmin
+              ? FirebaseFirestore.instance.collection('history').snapshots()
+              : FirebaseFirestore.instance
+                  .collection('history')
+                  .where('buyerEmail', isEqualTo: user.email)
+                  .snapshots(),
+          builder: (context, historySnapshot) {
+            if (historySnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (!historySnapshot.hasData || historySnapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text('Tidak ada riwayat pembelian'),
               );
-            },
-          );
-        },
+            }
+
+            final histories = historySnapshot.data!.docs;
+
+            return ListView.builder(
+              itemCount: histories.length,
+              itemBuilder: (context, index) {
+                final history = histories[index];
+                final String buyerEmail = history['buyerEmail'];
+                final int totalPrice = history['totalPrice'];
+                final Timestamp timestamp = history['timestamp'];
+
+                return Card(
+                  margin: const EdgeInsets.all(8.0),
+                  elevation: 2,
+                  child: ListTile(
+                    title: Text(
+                      'Total Harga: Rp ${totalPrice.toString().replaceAllMapped(
+                            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                            (Match m) => '${m[1]}.',
+                          )}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Waktu: ${timestamp.toDate().toString().split('.')[0]}',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          'Pembeli: $buyerEmail',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    isThreeLine: true,
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
