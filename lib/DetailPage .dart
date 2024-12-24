@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DetailPage extends StatelessWidget {
   final String productId;
@@ -67,16 +68,36 @@ class DetailPage extends StatelessWidget {
                 Text(description, style: TextStyle(fontSize: 16)),
                 Spacer(),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // Get the current user email
+                    User? user = FirebaseAuth.instance.currentUser;
+                    if (user == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Harap login terlebih dahulu')),
+                      );
+                      return;
+                    }
+
+                    String email = user.email!;
+
+                    // Save order to Firestore
+                    await FirebaseFirestore.instance.collection('orders').add({
+                      'productId': productId,
+                      'productName': name,
+                      'price': price,
+                      'buyerEmail': email,
+                      'timestamp': Timestamp.now(),
+                    });
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Produk $name dibeli!')),
+                      SnackBar(content: Text('Produk $name telah dimasukan keranjang!')),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
                     backgroundColor: Colors.green,
                   ),
-                  child: Text('Beli Sekarang', style: TextStyle(fontSize: 18)),
+                  child: Text('masukan kerajang', style: TextStyle(fontSize: 18)),
                 ),
               ],
             ),

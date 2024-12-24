@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Home_Page.dart';
+import 'SellerPage.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -71,11 +72,6 @@ class _AdminPageState extends State<AdminPage> {
                 final email = user['email'];
                 final status = user['status'] ?? 'customer';
 
-                // Ensure default status for users without status
-                if (user['status'] == null) {
-                  _setUserStatus(userId, 'customer');
-                }
-
                 return Card(
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -112,14 +108,32 @@ class _AdminPageState extends State<AdminPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  HomeScreen()),
-          );
-        },
-        child: const Icon(Icons.home),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            heroTag: 'toSellerPage',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SellerManagePage()),
+              );
+            },
+            icon: const Icon(Icons.add_box),
+            label: const Text('Seller Page'),
+          ),
+          const SizedBox(height: 16), // Spacing between buttons
+          FloatingActionButton(
+            heroTag: 'toHome',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
+            child: const Icon(Icons.home),
+          ),
+        ],
       ),
     );
   }

@@ -173,11 +173,37 @@ class _SellerManagePageState extends State<SellerManagePage> {
     );
   }
 }
-
-class ViewItemsPage extends StatelessWidget {
+class ViewItemsPage extends StatefulWidget {
   final String userId;
-
   const ViewItemsPage({required this.userId, super.key});
+
+  @override
+  State<ViewItemsPage> createState() => _ViewItemsPageState();
+}
+
+class _ViewItemsPageState extends State<ViewItemsPage> {
+  bool isAdmin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkAdminStatus();
+  }
+
+  Future<void> checkAdminStatus() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      if (userDoc.exists && userDoc.data()?['status'] == 'admin') {
+        setState(() {
+          isAdmin = true;
+        });
+      }
+    }
+  }
 
   Future<void> _deleteItem(String itemId) async {
     await FirebaseFirestore.instance.collection('products').doc(itemId).delete();
@@ -186,6 +212,10 @@ class ViewItemsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(isAdmin ? 'All Items' : 'My Items'),
+        backgroundColor: Colors.blueAccent,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -196,10 +226,13 @@ class ViewItemsPage extends StatelessWidget {
           ),
         ),
         child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('products')
-              .where('userId', isEqualTo: userId)
-              .snapshots(),
+          // Modify query based on admin status
+          stream: isAdmin
+              ? FirebaseFirestore.instance.collection('products').snapshots()
+              : FirebaseFirestore.instance
+                  .collection('products')
+                  .where('userId', isEqualTo: widget.userId)
+                  .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -245,46 +278,47 @@ class ViewItemsPage extends StatelessWidget {
                               ),
                               Text('Price: Rp${item['price']}'),
                               Text('Stock: ${item['stock']}'),
+                              if (isAdmin) Text('Seller ID: ${item['userId']}'),
                               Row(
                                 children: [
                                   TextButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('Confirm Delete'),
-                                              content: const Text('Are you sure you want to delete this item?'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop(); // Close the dialog
-                                                  },
-                                                  child: const Text('Cancel'),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Confirm Delete'),
+                                            content: const Text('Are you sure you want to delete this item?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () async {
+                                                  Navigator.of(context).pop();
+                                                  await _deleteItem(item.id);
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(content: Text('Item deleted successfully')),
+                                                  );
+                                                },
+                                                child: const Text(
+                                                  'Delete',
+                                                  style: TextStyle(color: Colors.red),
                                                 ),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop(); // Close the dialog
-                                                    await _deleteItem(item.id); // Call the delete method
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      const SnackBar(content: Text('Item deleted successfully')),
-                                                    );
-                                                  },
-                                                  child: const Text(
-                                                    'Delete',
-                                                    style: TextStyle(color: Colors.red),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Delete',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                      ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
