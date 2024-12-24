@@ -172,14 +172,14 @@ class _HomePageState extends State<HomePage> {
                                         onPressed: () {
                                           // Aksi tombol beli
                                           ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('Produk ${product['name']} dibeli!')),
+                                            SnackBar(content: Text('feature ini blm ada gunakan button detai jika ingin beli')),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.green,
                                           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                                         ),
-                                        child: Text('Beli'),
+                                        child: Text('masukan keranjang'),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {

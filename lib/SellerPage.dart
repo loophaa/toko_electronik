@@ -173,6 +173,11 @@ class _SellerManagePageState extends State<SellerManagePage> {
     );
   }
 }
+
+
+
+
+
 class ViewItemsPage extends StatefulWidget {
   final String userId;
   const ViewItemsPage({required this.userId, super.key});
@@ -209,6 +214,15 @@ class _ViewItemsPageState extends State<ViewItemsPage> {
     await FirebaseFirestore.instance.collection('products').doc(itemId).delete();
   }
 
+  void _showFeatureNotAvailable() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Feature currently not available'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -226,7 +240,6 @@ class _ViewItemsPageState extends State<ViewItemsPage> {
           ),
         ),
         child: StreamBuilder<QuerySnapshot>(
-          // Modify query based on admin status
           stream: isAdmin
               ? FirebaseFirestore.instance.collection('products').snapshots()
               : FirebaseFirestore.instance
@@ -317,6 +330,13 @@ class _ViewItemsPageState extends State<ViewItemsPage> {
                                     child: const Text(
                                       'Delete',
                                       style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: _showFeatureNotAvailable,
+                                    child: const Text(
+                                      'Edit',
+                                      style: TextStyle(color: Colors.blue),
                                     ),
                                   ),
                                 ],
