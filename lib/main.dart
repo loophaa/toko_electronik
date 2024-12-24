@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Home_Page.dart';
 import 'Register_Page.dart';
 import 'Forgot_Password.dart';
+import 'LoginSellerPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -178,6 +179,23 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text(
                       "Don't have an account? Register here",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SellerPage()),
+                      );
+                    },
+                    child: const Text(
+                      "seller click here",
                       style: TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,
