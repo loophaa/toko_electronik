@@ -6,6 +6,11 @@ import 'Register_Page.dart';
 import 'Forgot_Password.dart';
 import 'LoginSellerPage.dart';
 
+
+
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -41,7 +46,46 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
+
+
+  bool _validateInputs() {
+    if (_emailController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your email')),
+      );
+      return false;
+    }
+
+    if (_passwordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your password')),
+      );
+      return false;
+    }
+
+    // Add email format validation here
+    String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    if (!RegExp(emailPattern).hasMatch(_emailController.text.trim())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address')),
+      );
+      return false;
+    }
+
+    // Add additional validation rules here (e.g., password strength)
+
+    return true;
+  }
+
+
+
+
   Future<void> _login() async {
+
+   if (!_validateInputs()) {
+      return;
+    }
     try {
       await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
